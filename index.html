@@ -18,16 +18,19 @@
   <button id="closeBtn">Закрыть WebApp</button>
 
   <script>
-    Telegram.WebApp.ready();
+    if (window.Telegram && Telegram.WebApp) {
+      Telegram.WebApp.ready();
 
-    // Выводим данные из Telegram WebApp SDK
-    const dataEl = document.getElementById("data");
-    dataEl.textContent = JSON.stringify(Telegram.WebApp.initDataUnsafe || "Данные не переданы", null, 2);
+      const dataEl = document.getElementById("data");
+      dataEl.textContent = JSON.stringify(Telegram.WebApp.initDataUnsafe || "Данные не переданы", null, 2);
 
-    // Кнопка закрытия WebApp
-    document.getElementById("closeBtn").onclick = () => {
-      Telegram.WebApp.close();
-    };
+      document.getElementById("closeBtn").onclick = () => {
+        Telegram.WebApp.close();
+      };
+    } else {
+      document.getElementById("data").textContent = "Этот WebApp работает только внутри Telegram!";
+      document.getElementById("closeBtn").style.display = "none";
+    }
   </script>
 </body>
 </html>
