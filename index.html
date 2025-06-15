@@ -1,43 +1,23 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Telegram WebApp Example</title>
+  <meta charset="utf-8">
+  <title>Telegram WebApp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <h1>Telegram WebApp initData Demo</h1>
-  <pre id="result">Ждём initData...</pre>
+  <h2>Hello, Telegram!</h2>
+  <p>This is a simple WebApp.</p>
+  <button onclick="Telegram.WebApp.close()">Close</button>
 
   <script>
-    if (window.Telegram && window.Telegram.WebApp) {
-      window.Telegram.WebApp.ready();
-
-      const initData = window.Telegram.WebApp.initData || '';
-
-      document.getElementById('result').textContent = 'initData:\n' + initData;
-
-      fetch('https://tg-webapp-one.vercel.app/api/validate', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({initData})
-      })
-      .then(res => res.json())
-      .then(data => {
-        const resultEl = document.getElementById('result');
-        if (data.ok) {
-          resultEl.textContent = 'Пользователь:\n' + JSON.stringify(data.user, null, 2);
-        } else {
-          resultEl.textContent = 'Ошибка:\n' + data.error;
-        }
-      })
-      .catch(err => {
-        document.getElementById('result').textContent = 'Ошибка запроса:\n' + err;
-      });
-
-    } else {
-      document.getElementById('result').textContent = 'Ошибка: WebApp не запущен в Telegram';
-    }
+    Telegram.WebApp.ready();
+    Telegram.WebApp.MainButton.setText("Buy Stickers");
+    Telegram.WebApp.MainButton.onClick(() => {
+      alert("Here you could initiate TON payment or redirect to sticker shop.");
+    });
+    Telegram.WebApp.MainButton.show();
   </script>
 </body>
 </html>
