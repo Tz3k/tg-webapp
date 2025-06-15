@@ -2,32 +2,34 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Telegram WebApp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Telegram WebApp Example</title>
 </head>
 <body>
-  <h1>Пример WebApp</h1>
+  <h1>Telegram WebApp initData Demo</h1>
+  <pre id="result">Ждём initData...</pre>
 
   <script>
-    // Ждём, пока Telegram WebApp будет готов
     window.Telegram.WebApp.ready();
 
-    // Получаем initData (авторизационные данные)
     const initData = window.Telegram.WebApp.initData;
 
-    // Отправляем initData на сервер для проверки
     fetch('https://my-webapp-eyqvuo9d2-teuks-projects.vercel.app/api/validate', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ initData })
+      body: JSON.stringify({initData})
     })
     .then(res => res.json())
     .then(data => {
+      const resultEl = document.getElementById('result');
       if (data.ok) {
-        console.log('Пользователь:', data.user);
-        alert(`Привет, ${data.user.first_name}!`);
+        resultEl.textContent = 'Пользователь: ' + JSON.stringify(data.user, null, 2);
       } else {
-        console.error('Ошибка:', data.error);
+        resultEl.textContent = 'Ошибка: ' + data.error;
       }
+    })
+    .catch(err => {
+      document.getElementById('result').textContent = 'Ошибка запроса: ' + err;
     });
   </script>
 </body>
