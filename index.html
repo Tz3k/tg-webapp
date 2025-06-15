@@ -2,32 +2,32 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Мой Telegram WebApp</title>
+  <title>Telegram WebApp</title>
 </head>
 <body>
-  <h1>Привет из WebApp!</h1>
-  <div id="user-info"></div>
+  <h1>Пример WebApp</h1>
 
   <script>
+    // Ждём, пока Telegram WebApp будет готов
     window.Telegram.WebApp.ready();
 
+    // Получаем initData (авторизационные данные)
     const initData = window.Telegram.WebApp.initData;
 
-    fetch('https://my-webapp-eyqvuo9d2-teuks-projects.vercel.app', {  // укажи здесь URL своего бэкенда
+    // Отправляем initData на сервер для проверки
+    fetch('https://my-webapp-eyqvuo9d2-teuks-projects.vercel.app/api/validate', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({initData})
+      body: JSON.stringify({ initData })
     })
     .then(res => res.json())
     .then(data => {
       if (data.ok) {
-        document.getElementById('user-info').innerText = 'Пользователь: ' + JSON.stringify(data.user, null, 2);
+        console.log('Пользователь:', data.user);
+        alert(`Привет, ${data.user.first_name}!`);
       } else {
-        document.getElementById('user-info').innerText = 'Ошибка: ' + data.detail;
+        console.error('Ошибка:', data.error);
       }
-    })
-    .catch(e => {
-      document.getElementById('user-info').innerText = 'Ошибка запроса: ' + e.message;
     });
   </script>
 </body>
