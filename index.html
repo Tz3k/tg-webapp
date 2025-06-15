@@ -10,27 +10,34 @@
   <pre id="result">Ждём initData...</pre>
 
   <script>
-    window.Telegram.WebApp.ready();
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
 
-    const initData = window.Telegram.WebApp.initData;
+      const initData = window.Telegram.WebApp.initData || '';
 
-    fetch('my-webapp-b78qm9562-teuks-projects.vercel.app/api/validate', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({initData})
-    })
-    .then(res => res.json())
-    .then(data => {
-      const resultEl = document.getElementById('result');
-      if (data.ok) {
-        resultEl.textContent = 'Пользователь: ' + JSON.stringify(data.user, null, 2);
-      } else {
-        resultEl.textContent = 'Ошибка: ' + data.error;
-      }
-    })
-    .catch(err => {
-      document.getElementById('result').textContent = 'Ошибка запроса: ' + err;
-    });
+      document.getElementById('result').textContent = 'initData:\n' + initData;
+
+      fetch('https://my-webapp-b78qm9562-teuks-projects.vercel.app/api/validate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({initData})
+      })
+      .then(res => res.json())
+      .then(data => {
+        const resultEl = document.getElementById('result');
+        if (data.ok) {
+          resultEl.textContent = 'Пользователь:\n' + JSON.stringify(data.user, null, 2);
+        } else {
+          resultEl.textContent = 'Ошибка:\n' + data.error;
+        }
+      })
+      .catch(err => {
+        document.getElementById('result').textContent = 'Ошибка запроса:\n' + err;
+      });
+
+    } else {
+      document.getElementById('result').textContent = 'Ошибка: WebApp не запущен в Telegram';
+    }
   </script>
 </body>
 </html>
